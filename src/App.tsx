@@ -16,6 +16,7 @@ import Alerts from './pages/UiElements/Alerts';
 import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import OverView from './pages/Dashboard/OverView';
+import MarketPrice from './testpage';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -67,6 +68,14 @@ function App() {
             <>
               <PageTitle title="Form Elements | TailAdmin - Tailwind CSS Admin Dashboard Template" />
               <FormElements />
+            </>
+          }
+        />
+        <Route
+          path='/testm'
+          element={
+            <>
+              <MarketPrice />
             </>
           }
         />
