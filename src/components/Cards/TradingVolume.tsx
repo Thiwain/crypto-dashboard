@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-import { getMarketCapAPI, getMarketDataAPI, getTotalMarketCapAPI } from "../../api/DashboardOverviewAPICalls";
-import { useMarketData } from "../../contexts/MarketData/MarketDataContext";
-
-interface MarketCapDataType {
-    prices: [number, number][];
-    market_caps: [number, number][];
-    total_volumes: [number, number][];
-}
+import { getTradingVolumeAPI } from "../../api/DashboardOverviewAPICalls";
 
 
-const MarketCap: React.FC = () => {
+
+const TradingVolume: React.FC = () => {
     const [theme, setTheme] = useState<"light" | "dark">("light");
-
-    const { marketData, setMarketData } = useMarketData();
-    const [marketCapData, setMarketCapData] = useState<MarketCapDataType | null>(null);
-
+    const [tradingVolumeData, setTradingVolumeData] = useState<any | null>();
 
     useEffect(() => {
         const root = document.documentElement;
@@ -32,10 +23,8 @@ const MarketCap: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const market_cap_data = await getMarketCapAPI();
-                setMarketCapData(market_cap_data);
-                const market_data = await getTotalMarketCapAPI();
-                setMarketData(market_data);
+                const data = await getTradingVolumeAPI()
+                setTradingVolumeData(data);
             } catch (error) {
                 console.error("Error fetching data: ", error);
             }
@@ -65,10 +54,10 @@ const MarketCap: React.FC = () => {
         series: [
             {
                 name: "Market Cap",
-                data: marketCapData?.market_caps.map((cap) => cap[1]) || [],
+                data: tradingVolumeData?.prices?.map((cap: any) => cap[1]) || [],
             },
         ],
-        colors: [theme === "dark" ? "#5cc658" : "#5cc658"],
+        colors: [theme === "dark" ? "#47defc" : "#47defc"],
         stroke: {
             width: 2,
         },
@@ -78,8 +67,8 @@ const MarketCap: React.FC = () => {
         },
         xaxis: {
             type: "category",
-            categories: marketCapData
-                ? marketCapData.market_caps.map((cap) =>
+            categories: tradingVolumeData
+                ? tradingVolumeData.market_caps.map(() =>
                     null,
                 )
                 : [],
@@ -105,41 +94,14 @@ const MarketCap: React.FC = () => {
             <div className={`bg-white dark:bg-gray-800 p-5 rounded-lg shadow-lg flex relative overflow-hidden`}>
                 {/* Card Content */}
                 <div className="text-gray-800 dark:text-white z-10">
-                    <h3 className="text-lg font-semibold">Market Cap</h3>
+                    <h3 className="text-lg font-semibold">Trading Volume</h3>
                     <div className="text-2xl font-bold mt-2">
-                        {marketCapData ? marketCapData.total_volumes[0][1].toFixed(0) : 'Loading....'} USD
+                        {tradingVolumeData ? tradingVolumeData.prices[0][0].toFixed(0) : 'Loading....'} USD
                     </div>
                     <div
-                        className={`flex items-center font-medium mt-2 ${marketData
-                            ? marketData?.data.market_cap_change_percentage_24h_usd >= 0
-                                ? "text-green-500"
-                                : "text-red-500"
-                            : ""
-                            }`}
+                        className='flex items-center font-medium mt-8'
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-5 h-5 mr-1"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d={
-                                    marketData
-                                        ? marketData.data.market_cap_change_percentage_24h_usd >= 0
-                                            ? "M5 15l7-7m0 0l7 7m-7-7v18"
-                                            : "M19 9l-7 7m0 0l-7-7m7 7V3"
-                                        : ""
-                                }
-                            />
-                        </svg>
-                        {marketData
-                            ? `${marketData.data.market_cap_change_percentage_24h_usd.toFixed(2)}%`
-                            : "Loading..."}
+
                     </div>
                 </div>
 
@@ -160,4 +122,4 @@ const MarketCap: React.FC = () => {
 
 };
 
-export default MarketCap;
+export default TradingVolume;

@@ -49,4 +49,21 @@ const getMarketDataAPI = async () => {
     }
 };
 
-export { getMarketCapAPI, getMarketDataAPI, getTotalMarketCapAPI };
+const getTradingVolumeAPI = async () => {
+    try {
+        const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1',
+            { method: 'GET', headers: keyHeader }
+        )
+        return await res.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export {
+    getMarketCapAPI,
+    getMarketDataAPI,
+    getTotalMarketCapAPI,
+    getTradingVolumeAPI
+};

@@ -6,11 +6,14 @@ import './css/style.css';
 import './css/satoshi.css';
 import 'jsvectormap/dist/css/jsvectormap.css';
 import 'flatpickr/dist/flatpickr.min.css';
+import { MarketDataProvider } from './contexts/MarketData/MarketDataContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <App />
+      <MarketDataProvider>
+        <App />
+      </MarketDataProvider>
     </Router>
   </React.StrictMode>,
 );
