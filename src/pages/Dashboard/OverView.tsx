@@ -9,6 +9,7 @@ import MarketCap from '../../components/Cards/MarketCap';
 import { useMarketData } from '../../contexts/MarketData/MarketDataContext';
 import TradingVolume from '../../components/Cards/TradingVolume';
 import TrendingCrypto from '../../components/Cards/TrendingCrypto';
+import TopGainersCrypto from '../../components/Cards/TopGainersCrypto';
 
 
 
@@ -42,19 +43,19 @@ const OverView: React.FC = () => {
           <TrendingCrypto />
         </div>
         <div className="h-full">
-          <TrendingCrypto />
+          <TopGainersCrypto />
         </div>
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne />
-        <ChartTwo />
-        <ChartThree />
-        <MapOne />
-        <div className="col-span-12 xl:col-span-8">
+        {/* <ChartOne /> */}
+        {/* <ChartTwo /> */}
+        {/* <ChartThree /> */}
+        {/* <MapOne /> */}
+        <div className="col-span-12">
           <TableOne />
         </div>
-        <ChatCard />
+        {/* <ChatCard /> */}
       </div>
     </>
   );

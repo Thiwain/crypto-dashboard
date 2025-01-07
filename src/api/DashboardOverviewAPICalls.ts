@@ -73,10 +73,37 @@ const getTrendingCoinsAPI = async () => {
     }
 }
 
+const getTopGainersAPI = async () => {
+    try {
+        const res = await fetch(
+            'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1',
+            { method: 'GET', headers: keyHeader, });
+        const data = await res.json();
+        const topGainers = data
+            .sort((a: any, b: any) => b.price_change_percentage_24h - a.price_change_percentage_24h)
+            .slice(0, 3);
+        return topGainers;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+const getCoinDataAPI = async (id: string) => {
+    try {
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`, { method: 'GET', headers: keyHeader });
+        return await res.json();
+    } catch (error) {
+        throw error;
+    }
+}
+
 export {
     getMarketCapAPI,
     getMarketDataAPI,
     getTotalMarketCapAPI,
     getTradingVolumeAPI,
-    getTrendingCoinsAPI
+    getTrendingCoinsAPI,
+    getTopGainersAPI,
+    getCoinDataAPI
 };
