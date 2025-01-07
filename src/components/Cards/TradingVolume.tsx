@@ -57,7 +57,7 @@ const TradingVolume: React.FC = () => {
                 data: tradingVolumeData?.prices?.map((cap: any) => cap[1]) || [],
             },
         ],
-        colors: [theme === "dark" ? "#47defc" : "#47defc"],
+        colors: [theme === "dark" ? "#8403fc" : "#8403fc"],
         stroke: {
             width: 2,
         },

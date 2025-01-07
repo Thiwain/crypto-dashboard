@@ -8,6 +8,7 @@ import TableOne from '../../components/Tables/TableOne';
 import MarketCap from '../../components/Cards/MarketCap';
 import { useMarketData } from '../../contexts/MarketData/MarketDataContext';
 import TradingVolume from '../../components/Cards/TradingVolume';
+import TrendingCrypto from '../../components/Cards/TrendingCrypto';
 
 
 
@@ -36,6 +37,12 @@ const OverView: React.FC = () => {
         </div>
         <div className="h-full">
           <TradingVolume />
+        </div>
+        <div className="h-full">
+          <TrendingCrypto />
+        </div>
+        <div className="h-full">
+          <TrendingCrypto />
         </div>
       </div>
 

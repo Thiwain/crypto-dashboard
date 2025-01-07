@@ -52,8 +52,20 @@ const getMarketDataAPI = async () => {
 const getTradingVolumeAPI = async () => {
     try {
         const res = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=1',
-            { method: 'GET', headers: keyHeader }
-        )
+            { method: 'GET', headers: keyHeader });
+        return await res.json();
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+const getTrendingCoinsAPI = async () => {
+    try {
+        const res = await fetch('https://api.coingecko.com/api/v3/search/trending', {
+            method: 'GET',
+            headers: keyHeader
+        })
         return await res.json();
     } catch (error) {
         console.error(error);
@@ -65,5 +77,6 @@ export {
     getMarketCapAPI,
     getMarketDataAPI,
     getTotalMarketCapAPI,
-    getTradingVolumeAPI
+    getTradingVolumeAPI,
+    getTrendingCoinsAPI
 };
