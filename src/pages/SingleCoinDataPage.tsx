@@ -49,7 +49,7 @@ const SingleCoinDataPage = () => {
             <div className="border-b border-stroke py-4 px-7 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">Growth</h3>
             </div>
-            <ChartOne />
+            <ChartOne name={coinDetails.name}/>
           </div>
         </div>
 

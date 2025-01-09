@@ -14,20 +14,30 @@ interface ChartOneState {
   }[];
 }
 
-const ChartOne: React.FC = () => {
+interface ChartOneProps {
+  name: string;
+}
+
+interface RouteParams {
+  id: string;
+}
+
+const ChartOne: React.FC<ChartOneProps> = ({ name }) => {
   const [coinGrowth, setCoinGrowth] = useState<CoinGrowthData | undefined>(undefined);
   const [state, setState] = useState<ChartOneState>({
     series: [
       {
-        name: "Bitcoin Price",
+        name: "Price",
         data: [],
       },
     ],
   });
 
-  const { id } = useParams();
+  const { id } = useParams<RouteParams>();
 
   useEffect(() => {
+    if (!id) return;
+
     const fetchCoinGrowth = async () => {
       try {
         const myHeaders = new Headers();
@@ -48,20 +58,20 @@ const ChartOne: React.FC = () => {
     };
 
     fetchCoinGrowth();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (coinGrowth) {
       setState({
         series: [
           {
-            name: "Bitcoin Price",
-            data: coinGrowth.prices.map((price) => price[1].toFixed(2)) || [],
+            name: `${name} Price`,
+            data: coinGrowth.prices.map((price) => price[1]),
           },
         ],
       });
     }
-  }, [coinGrowth]);
+  }, [coinGrowth, name]);
 
   const options: ApexOptions = {
     legend: {
