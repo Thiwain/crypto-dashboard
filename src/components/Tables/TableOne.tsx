@@ -1,123 +1,120 @@
-import { BRAND } from '../../types/brand';
-import BrandOne from '../../images/brand/brand-01.svg';
-import BrandTwo from '../../images/brand/brand-02.svg';
-import BrandThree from '../../images/brand/brand-03.svg';
-import BrandFour from '../../images/brand/brand-04.svg';
-import BrandFive from '../../images/brand/brand-05.svg';
-
-const brandData: BRAND[] = [
-  {
-    logo: BrandOne,
-    name: 'Google',
-    visitors: 3.5,
-    revenues: '5,768',
-    sales: 590,
-    conversion: 4.8,
-  },
-  {
-    logo: BrandTwo,
-    name: 'Twitter',
-    visitors: 2.2,
-    revenues: '4,635',
-    sales: 467,
-    conversion: 4.3,
-  },
-  {
-    logo: BrandThree,
-    name: 'Github',
-    visitors: 2.1,
-    revenues: '4,290',
-    sales: 420,
-    conversion: 3.7,
-  },
-  {
-    logo: BrandFour,
-    name: 'Vimeo',
-    visitors: 1.5,
-    revenues: '3,580',
-    sales: 389,
-    conversion: 2.5,
-  },
-  {
-    logo: BrandFive,
-    name: 'Facebook',
-    visitors: 3.5,
-    revenues: '6,768',
-    sales: 390,
-    conversion: 4.2,
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const TableOne = () => {
+  const [coinData, setCoinData] = useState<any[]>([]); // State to hold coin data
+  const [loading, setLoading] = useState(true); // State to handle loading
+
+  // Fetch data from the CoinGecko API
+  useEffect(() => {
+    const fetchCoinData = async () => {
+      try {
+        const response = await fetch(
+          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1'
+        );
+        const data = await response.json();
+        setCoinData(data);
+      } catch (error) {
+        console.error('Error fetching coin data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCoinData();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">
-        Top Channels
+        Top Cryptocurrencies
       </h4>
 
       <div className="flex flex-col">
         <div className="grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-5">
           <div className="p-2.5 xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Source
+              Coin
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Visitors
+              Price (USD)
             </h5>
           </div>
           <div className="p-2.5 text-center xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Revenues
+              Market Cap
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Sales
+              Volume
             </h5>
           </div>
           <div className="hidden p-2.5 text-center sm:block xl:p-5">
             <h5 className="text-sm font-medium uppercase xsm:text-base">
-              Conversion
+              24h Change
             </h5>
           </div>
         </div>
 
-        {brandData.map((brand, key) => (
-          <div
-            className={`grid grid-cols-3 sm:grid-cols-5 ${
-              key === brandData.length - 1
+        {coinData.map((coin) => (
+          <NavLink to={`/coin-data/${coin.id}`}>
+            <div
+              className={`grid grid-cols-3 sm:grid-cols-5 ${coin === coinData[coinData.length - 1]
                 ? ''
                 : 'border-b border-stroke dark:border-strokedark'
-            }`}
-            key={key}
-          >
-            <div className="flex items-center gap-3 p-2.5 xl:p-5">
-              <div className="flex-shrink-0">
-                <img src={brand.logo} alt="Brand" />
+                } hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-200`}
+              key={coin.id}
+            >
+              <div className="flex items-center gap-3 p-2.5 xl:p-5">
+                <div className="flex-shrink-0">
+                  <img
+                    src={coin.image}
+                    alt={coin.name}
+                    className="h-8 w-8"
+                  />
+                </div>
+                <p className="hidden text-black dark:text-white sm:block">
+                  {coin.name}
+                </p>
               </div>
-              <p className="hidden text-black dark:text-white sm:block">
-                {brand.name}
-              </p>
-            </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{brand.visitors}K</p>
-            </div>
+              <div className="flex items-center justify-center p-2.5 xl:p-5">
+                <p className="text-black dark:text-white">
+                  ${coin.current_price.toLocaleString()}
+                </p>
+              </div>
 
-            <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">${brand.revenues}</p>
-            </div>
+              <div className="flex items-center justify-center p-2.5 xl:p-5">
+                <p className="text-meta-3">
+                  ${coin.market_cap.toLocaleString()}
+                </p>
+              </div>
 
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{brand.sales}</p>
-            </div>
+              <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                <p className="text-black dark:text-white">
+                  ${coin.total_volume.toLocaleString()}
+                </p>
+              </div>
 
-            <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-meta-5">{brand.conversion}%</p>
+              <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
+                <p
+                  className={`${coin.price_change_percentage_24h >= 0
+                    ? 'text-green-500'
+                    : 'text-red-500'
+                    }`}
+                >
+                  {coin.price_change_percentage_24h.toFixed(2)}%
+                </p>
+              </div>
             </div>
-          </div>
+          </NavLink>
         ))}
       </div>
     </div>
